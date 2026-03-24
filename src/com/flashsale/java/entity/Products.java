@@ -60,12 +60,11 @@ public class Products {
 
     @Override
     public String toString() {
-        return "Products{" +
-                "Id: " + id + "/n" +
-                "Name:'" + name + "/n" +
-                "Price: " + price + "/n" +
-                "Category: " + category + "/n" +
-                "Stock: " + stock +
-                '}';
+        return String.format("| %-5d | %-20s | %,15.2f | %-15s | %8d |", id, name, price, category, stock);
+    }
+
+    public static String getHeader() {
+        return String.format("| %-5s | %-20s | %-15s | %-15s | %-8s |\n", "ID", "Product Name", "Price", "Category", "Stock") +
+                "-------------------------------------------------------------------------";
     }
 }

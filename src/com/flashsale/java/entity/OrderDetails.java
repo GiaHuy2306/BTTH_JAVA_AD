@@ -59,12 +59,11 @@ public class OrderDetails {
 
     @Override
     public String toString() {
-        return "OrderDetails{" +
-                "ID: " + id + "/n" +
-                "Order Id: " + orderId + "/n" +
-                "Product Id: " + productId + "/n" +
-                "Quantity: " + quantity + "/n" +
-                "Price: " + price + "/n" +
-                '}';
+        return String.format("| %-5d | %-8d | %-10d | %-6d | %,15.2f |", id, orderId, productId, quantity, price);
+    }
+
+    public static String getHeader() {
+        return String.format("| %-5s | %-8s | %-10s | %-6s | %-15s |\n", "ID", "Order ID", "Product ID", "Qty", "Price") +
+                "-------------------------------------------------------------------";
     }
 }

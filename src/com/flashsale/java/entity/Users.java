@@ -40,10 +40,11 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" +
-                "Id: " + id + "/n" +
-                "Email: '" + email + "/n" +
-                ", username='" + username +
-                '}';
+        return String.format("| %-5d | %-30s | %-20s |", id, email, username);
+    }
+
+    public static String getHeader() {
+        return String.format("| %-5s | %-30s | %-20s |\n", "ID", "Email Address", "Username") +
+                "-------------------------------------------------------------";
     }
 }

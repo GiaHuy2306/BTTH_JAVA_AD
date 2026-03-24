@@ -1,6 +1,7 @@
 package com.flashsale.java.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Orders {
     private int id;
@@ -62,12 +63,13 @@ public class Orders {
 
     @Override
     public String toString() {
-        return "Orders{" +
-                "Id: " + id + "/n" +
-                "User Id: " + userId + "/n" +
-                "TotalAmount:" + totalAmount + "/n" +
-                "OrderDate: " + orderDate + "/n" +
-                "Status: " + status +
-                '}';
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dateStr = (orderDate != null) ? orderDate.format(formatter) : "N/A";
+        return String.format("| %-5d | %-8d | %,15.2f | %-18s | %-10s |", id, userId, totalAmount, dateStr, status);
+    }
+
+    public static String getHeader() {
+        return String.format("| %-5s | %-8s | %-15s | %-18s | %-10s |\n", "ID", "User ID", "Total Amount", "Order Date", "Status") +
+                "-----------------------------------------------------------------------";
     }
 }
