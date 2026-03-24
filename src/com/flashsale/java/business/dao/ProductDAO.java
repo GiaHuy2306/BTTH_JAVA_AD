@@ -24,8 +24,8 @@ public class ProductDAO {
     public List<Products> getAll() {
         List<Products> list = new ArrayList<>();
         String sql = "SELECT " + PRODUCT_COLUMNS + " FROM Products";
-        Connection conn = DatabaseConnectionManager.getConnection();
-        try (
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -41,8 +41,8 @@ public class ProductDAO {
     // 2. Tìm theo ID
     public Products findById(int id) {
         String sql = "SELECT " + PRODUCT_COLUMNS + " FROM Products WHERE id = ?";
-        Connection conn = DatabaseConnectionManager.getConnection();
-        try (
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
@@ -63,8 +63,8 @@ public class ProductDAO {
         // SQL chống trừ kho âm (stock + change >= 0)
         String sql = "UPDATE Products SET stock = stock + ? " +
                 "WHERE id = ? AND (stock + ?) >= 0";
-        Connection conn = DatabaseConnectionManager.getConnection();
-        try (
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, quantityChange);
@@ -83,8 +83,8 @@ public class ProductDAO {
     // 4. Thêm sản phẩm mới
     public boolean insert(Products p) {
         String sql = "INSERT INTO Products (name, price, category, stock) VALUES (?, ?, ?, ?)";
-        Connection conn = DatabaseConnectionManager.getConnection();
-        try (
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, p.getName());
@@ -105,8 +105,8 @@ public class ProductDAO {
         // Lưu ý: Nếu sản phẩm đã có trong đơn hàng, câu lệnh này sẽ throw SQLException
         // do ràng buộc Foreign Key trong file DatabaseConnectionManager.getConnection();
         String sql = "DELETE FROM Products WHERE id = ?";
-        Connection conn = DatabaseConnectionManager.getConnection();
-        try (
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);

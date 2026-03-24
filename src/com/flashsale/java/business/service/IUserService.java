@@ -7,8 +7,8 @@ import java.util.List;
 public interface IUserService {
     boolean addUsers(Users users);
     boolean deleteUsers(int id);
-    boolean updateUsers(Users users);
+    boolean updateUsers(int id, String username, String email);
     void displayAll();
-    List<Users> getTopBuyers();
+    void getTopBuyers();
 
 }

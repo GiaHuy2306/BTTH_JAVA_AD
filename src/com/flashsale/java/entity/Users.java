@@ -39,6 +39,7 @@ public class Users {
     }
 
     public static void getHeader() {
+        System.out.println("-------------------------------------------------------------");
         System.out.printf("| %-5s | %-30s | %-20s |\n", "ID", "Email Address", "Username");
         System.out.println("-------------------------------------------------------------");
     }

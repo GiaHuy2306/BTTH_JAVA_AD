@@ -37,17 +37,16 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public boolean deleteProduct(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("ID không tồn tại");
+        if(productDAO.findById(id) == null) {
+            throw new RuntimeException("Không tìm thấy sản phẩm!");
         }
-
         return productDAO.delete(id);
     }
 
     @Override
     public boolean updateProduct(int id, int quantity) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("ID không tồn tại");
+        if(productDAO.findById(id) == null) {
+            throw new RuntimeException("Không tìm thấy sản phẩm!");
         }
         if (quantity < 0) {
             throw new IllegalArgumentException("Số lượng không được âm");
@@ -61,13 +60,14 @@ public class ProductServiceImpl implements IProductService {
         if(products.isEmpty()) {
             throw new RuntimeException("Danh sách sản phẩm trống!");
         }
-        System.out.println("======= Danh sách sản phẩm =======");
+        Products.getHeader();
         products.stream().forEach(element -> element.displayData());
     }
 
     @Override
     public double caculateCategoryRevenue(String category) {
         double result = 0;
+
         try (Connection conn = DatabaseConnectionManager.getConnection();
              CallableStatement cs = conn.prepareCall("{? = call FUNC_CalculateCategoryRevenue(?)}")) {
 

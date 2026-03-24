@@ -14,8 +14,7 @@ public class ProductMenu {
             System.out.println("==================PRODUCT MANAGEMENT==================");
             System.out.println("1. Thêm sản phẩm");
             System.out.println("2. Cập nhật số lượng sản phẩm");
-            System.out.println("3. Xoá sản phẩm");
-            System.out.println("4. Danh sách sản phẩm");
+            System.out.println("3. Danh sách sản phẩm");
             System.out.println("0. Thoát");
             System.out.println("========================================================");
             choice = InputMethod.getInputInt("Lựa chọn của bạn : ");
@@ -25,11 +24,13 @@ public class ProductMenu {
                             1,
                             InputMethod.getInputString("Nhập tên sản phẩm : "),
                             InputMethod.getInputDouble("Nhập giá sản phẩm : "),
-                            InputMethod.getInputString("Nhập danh mục sản phẩm : "),
+                            MenuPrinter.pickCategory(),
                             InputMethod.getInputInt("Nhập số lượng sản phẩm : ")
                     );
                     try{
-                        productService.addProduct(newProduct);
+                        if(productService.addProduct(newProduct)){
+                            System.out.println("Thêm thành công!");
+                        }
                     }catch(Exception e){
                         System.out.println(e.getMessage());
                     }
@@ -38,20 +39,15 @@ public class ProductMenu {
                     id = InputMethod.getInputInt("Nhập id sản phẩm : ");
                     int updateQuantity = InputMethod.getInputInt("Nhập số lượng muốn cập nhật : ");
                     try{
-                        productService.updateProduct(id, updateQuantity);
+                        if(productService.updateProduct(id, updateQuantity)){
+                            System.out.println("Cập nhật thành công!");
+                        }
+
                     }catch(Exception e){
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
-                    id = InputMethod.getInputInt("Nhập id sản phẩm : ");
-                    try{
-                        productService.deleteProduct(id);
-                    }catch(Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 4:
                     try{
                         productService.displayAll();
                     }catch(Exception e){

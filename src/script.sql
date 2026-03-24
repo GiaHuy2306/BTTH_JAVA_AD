@@ -1,7 +1,7 @@
 -- bảng Users
 CREATE TABLE IF NOT EXISTS Users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE
     );
 
@@ -42,27 +42,28 @@ CREATE FUNCTION FUNC_CalculateCategoryRevenue(p_category VARCHAR(255))
 BEGIN
     DECLARE total DECIMAL(15,2);
 
-SELECT SUM(od.quantity * od.unit_price)
-INTO total
-FROM Order_Details od
-         JOIN Products p ON od.product_id = p.id
-WHERE p.category = p_category;
+    SELECT SUM(od.quantity * od.unit_price)
+    INTO total
+    FROM Order_Details od
+             JOIN Products p ON od.product_id = p.id
+    WHERE p.category = p_category;
 
-RETURN IFNULL(total, 0);
+    RETURN IFNULL(total, 0);
 END;
 
 
 DROP PROCEDURE IF EXISTS SP_GetTopBuyers;
 CREATE PROCEDURE SP_GetTopBuyers()
 BEGIN
-SELECT
-    u.id,
-    u.name,
-    u.email,
-    SUM(o.total_amount) AS total_spent
-FROM users u
-         JOIN orders o ON u.id = o.user_id
-GROUP BY u.id, u.name, u.email
-ORDER BY total_spent DESC
-    LIMIT 5;
+    SELECT
+        u.id,
+        u.username,
+        u.email,
+        SUM(o.total_amount) AS total_spent,
+        COUNT(o.id) AS total_orders
+    FROM users u
+             JOIN orders o ON u.id = o.user_id
+    GROUP BY u.id, u.username, u.email
+    ORDER BY total_spent DESC
+        LIMIT 5;
 END;

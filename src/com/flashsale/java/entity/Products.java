@@ -59,6 +59,7 @@ public class Products {
     }
 
     public static void getHeader() {
+        System.out.println("-------------------------------------------------------------------------");
         System.out.printf("| %-5s | %-20s | %-15s | %-15s | %-8s |\n", "ID", "Product Name", "Price", "Category", "Stock");
         System.out.println("-------------------------------------------------------------------------");
     }

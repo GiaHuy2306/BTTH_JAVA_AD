@@ -21,11 +21,7 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("User không được null");
         }
 
-        if (users.getUsername() == null || users.getUsername().trim().isEmpty() || users.getEmail().matches(regex)) {
-            throw new IllegalArgumentException("Tên user không hợp lệ");
-        }
-
-        if (users.getEmail() == null || users.getEmail().trim().isEmpty()) {
+        if(!users.getEmail().matches(regex)){
             throw new IllegalArgumentException("Email không hợp lệ");
         }
 
@@ -34,49 +30,61 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean deleteUsers(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("ID không tồn tại");
+        if(userDAO.getById(id) == null){
+            throw new RuntimeException("Không tìm thấy người dùng!");
         }
         return  userDAO.delete(id);
     }
 
     @Override
-    public boolean updateUsers(Users users) {
-        if (users.getId() <= 0) {
-            throw new IllegalArgumentException("ID không tồn tại");
+    public boolean updateUsers(int id, String username, String email) {
+        if(userDAO.getById(id) == null){
+            throw new RuntimeException("Không tìm thấy người dùng!");
         }
-
-        return userDAO.update(users);
+        return userDAO.update(id, username, email);
     }
 
     @Override
     public void displayAll() {
         List<Users> users = userDAO.getAll();
+        if(users.isEmpty()){
+            throw new RuntimeException("Danh sách người dùng trống!");
+        }
+
         System.out.println("======= Danh sách người dùng =======");
+        Users.getHeader();
         users.stream().forEach(u -> u.displayData());
     }
 
     @Override
-    public List<Users> getTopBuyers() {
-        List<Users> topList = new ArrayList<>();
+    public void getTopBuyers() {
         String sql = "{CALL SP_GetTopBuyers()}";
 
+        System.out.println("\n======= TOP 5 KHÁCH HÀNG CHI TIÊU NHIỀU NHẤT =======");
+        System.out.printf("| %-5s | %-20s | %-15s | %-10s |\n", "ID", "Tên khách hàng", "Tổng chi (VNĐ)", "Số đơn");
+        System.out.println("------------------------------------------------------------");
+
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             CallableStatement stmt = conn.prepareCall(sql))
-        {
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Users user = new Users();
                 user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("name"));
+                user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
-                topList.add(user);
-            }
 
-        }catch (SQLException e){
-            e.printStackTrace();
+                double spent = rs.getDouble("total_spent");
+                int orders = rs.getInt("total_orders");
+
+                System.out.printf("| %-5d | %-20s | %,15.2f | %-10d |\n",
+                        user.getId(), user.getUsername(), spent, orders);
+            }
+            System.out.println("------------------------------------------------------------");
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi báo cáo: " + e.getMessage());
         }
-        return topList;
     }
 }
