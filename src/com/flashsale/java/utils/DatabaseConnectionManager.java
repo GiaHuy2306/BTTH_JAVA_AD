@@ -3,6 +3,7 @@ package com.flashsale.java.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseConnectionManager {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -22,9 +23,54 @@ public class DatabaseConnectionManager {
         return null;
     }
 
-    public static void initDB(){}
+    public static void initDB(){
+        try(
+                Connection conn = openConnection();
+                Statement stmt = conn.createStatement();
+        ){
+            String users = "create table if not exists Users(" +
+                    "id int primary key auto_increment, " +
+                    "name varchar(255) not null, " +
+                    "email varchar(255) not null unique" +
+                    ");";
+
+            String products = "create table if not exists Products(" +
+                    "id int primary key auto_increment, " +
+                    "name varchar(255) not null, " +
+                    "price DECIMAL(15,2) not null check ( price > 0 ), " +
+                    "category varchar(255) not null, " +
+                    "stock int not null check ( stock >= 0 )" +
+                    ");";
+
+            String orders = "create table if not exists Orders(" +
+                    "id int primary key auto_increment, " +
+                    "user_id int not null, " +
+                    "foreign key (user_id) references Users(id), " +
+                    "total_amount decimal(15,2) not null check ( total_amount >= 0 ), " +
+                    "order_date DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                    "status ENUM('PENDING', 'PAID', 'CANCEL') DEFAULT 'PENDING'" +
+                    ");";
+
+            String order_detail = "create table if not exists Order_Details(" +
+                    "id int primary key auto_increment, " +
+                    "order_id int not null, " +
+                    "product_id int not null, " +
+                    "foreign key (product_id) references Products(id), " +
+                    "foreign key (order_id) references Orders(id), " +
+                    "quantity int check (quantity >= 0 ), " +
+                    "unit_price DECIMAL(15,2) not null check ( unit_price >= 0 ) " +
+                    ");";
+            stmt.executeUpdate(users);
+            stmt.executeUpdate(products);
+            stmt.executeUpdate(orders);
+            stmt.executeUpdate(order_detail);
+        }catch(Exception e){
+            System.out.println("Error : " +e.getMessage());
+        }
+    }
 
     static void main(String[] args) {
         Connection con = openConnection();
+        DatabaseConnectionManager.initDB();
     }
 }
