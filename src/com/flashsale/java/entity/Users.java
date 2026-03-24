@@ -38,12 +38,12 @@ public class Users {
         this.username = username;
     }
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "Id: " + id + "/n" +
-                "Email: '" + email + "/n" +
-                ", username='" + username +
-                '}';
+    public static void getHeader() {
+        System.out.printf("| %-5s | %-30s | %-20s |\n", "ID", "Email Address", "Username");
+        System.out.println("-------------------------------------------------------------");
+    }
+
+    public void displayData() {
+        System.out.printf("| %-5d | %-30s | %-20s |\n", this.id, this.email, this.username);
     }
 }

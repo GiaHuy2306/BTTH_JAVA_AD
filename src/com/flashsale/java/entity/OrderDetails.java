@@ -57,14 +57,12 @@ public class OrderDetails {
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return "OrderDetails{" +
-                "ID: " + id + "/n" +
-                "Order Id: " + orderId + "/n" +
-                "Product Id: " + productId + "/n" +
-                "Quantity: " + quantity + "/n" +
-                "Price: " + price + "/n" +
-                '}';
+    public static void getHeader() {
+        System.out.printf("| %-5s | %-8s | %-10s | %-6s | %-15s |\n", "ID", "Order ID", "Prod ID", "Qty", "Price");
+        System.out.println("-------------------------------------------------------------------");
+    }
+
+    public void displayData() {
+        System.out.printf("| %-5d | %-8d | %-10d | %-6d | %,15.2f |\n", this.id, this.orderId, this.productId, this.quantity, this.price);
     }
 }

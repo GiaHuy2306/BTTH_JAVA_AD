@@ -58,14 +58,12 @@ public class Products {
         this.stock = stock;
     }
 
-    @Override
-    public String toString() {
-        return "Products{" +
-                "Id: " + id + "/n" +
-                "Name:'" + name + "/n" +
-                "Price: " + price + "/n" +
-                "Category: " + category + "/n" +
-                "Stock: " + stock +
-                '}';
+    public static void getHeader() {
+        System.out.printf("| %-5s | %-20s | %-15s | %-15s | %-8s |\n", "ID", "Product Name", "Price", "Category", "Stock");
+        System.out.println("-------------------------------------------------------------------------");
+    }
+
+    public void displayData() {
+        System.out.printf("| %-5d | %-20s | %,15.2f | %-15s | %8d |\n", this.id, this.name, this.price, this.category, this.stock);
     }
 }
