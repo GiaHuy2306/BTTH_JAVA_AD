@@ -43,6 +43,27 @@ public class UserDAO {
         }
     }
 
+    public Users getById(int id) {
+        String sql = "SELECT * FROM Users WHERE id = ?";
+        try (Connection conn = DatabaseConnectionManager.openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Users(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("email")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Users> getAll() {
         List<Users> list = new ArrayList<>();
         String sql = "SELECT * FROM Users";
