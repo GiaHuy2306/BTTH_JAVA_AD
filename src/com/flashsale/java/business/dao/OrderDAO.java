@@ -11,6 +11,32 @@ import java.util.List;
 
 public class OrderDAO implements IOrderDao {
     String sql = "INSERT INTO Orders (user_id, total_amount, order_date, status) VALUES (?, ?, ?, ?)";
+    String sqlGetAll = """
+            SELECT id, user_id, total_amount, order_date, status FROM Orders
+            """;
+
+    @Override
+    public List<Orders> getAllOrder(Connection conn) {
+        List<Orders> ordersList = new ArrayList<>();
+        try(Statement stmt = conn.createStatement()){
+            ResultSet rs = stmt.executeQuery(sqlGetAll);
+            while(rs.next()){
+                int order_id = rs.getInt("id");
+                int user_id = rs.getInt("user_id");
+                double total_amount = rs.getDouble("total_amount");
+                LocalDateTime order_date = rs.getObject("order_date", LocalDateTime.class);
+                OrderStatus status = OrderStatus.valueOf(rs.getString("status"));
+
+                Orders orders = new Orders(order_id, user_id, total_amount, order_date, status);
+                ordersList.add(orders);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ordersList;
+    }
 
     @Override
     public int insertOrder(Orders order, Connection conn) throws SQLException {

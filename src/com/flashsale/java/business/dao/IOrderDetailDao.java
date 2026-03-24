@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IOrderDetailDao {
+    List<OrderDetails> getAllOrderDetail(Connection conn);
+
     void insertOrderDetails(int orderid, List<OrderDetails> details, Connection conn) throws SQLException;
 
     List<OrderDetails> getDetailsByOrderId(int orderId);
