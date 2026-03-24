@@ -5,6 +5,8 @@ out/
 .kotlin
 .idea/
 *.iml
+
+src/com/flashsale/java/utils/DatabaseConnectionManager.java
 ### Eclipse ###
 .apt_generated
 .classpath
