@@ -60,10 +60,33 @@ public class DatabaseConnectionManager {
                     "quantity int check (quantity >= 0 ), " +
                     "unit_price DECIMAL(15,2) not null check ( unit_price >= 0 ) " +
                     ");";
+
+            String getTopBuyers = """
+                    DELIMITER $$
+                    
+                    DROP PROCEDURE IF EXISTS SP_GetTopBuyers $$
+                    
+                    CREATE PROCEDURE SP_GetTopBuyers()
+                    BEGIN
+                        SELECT\s
+                            u.id,
+                            u.name,
+                            u.email,
+                            SUM(o.total_amount) AS total_spent
+                        FROM users u
+                        JOIN orders o ON u.id = o.user_id
+                        GROUP BY u.id, u.name, u.email
+                        ORDER BY total_spent DESC
+                        LIMIT 5;
+                    END $$
+                    
+                    DELIMITER ;
+                    """;
             stmt.executeUpdate(users);
             stmt.executeUpdate(products);
             stmt.executeUpdate(orders);
             stmt.executeUpdate(order_detail);
+            stmt.executeUpdate(getTopBuyers);
         }catch(Exception e){
             System.out.println("Error : " +e.getMessage());
         }
