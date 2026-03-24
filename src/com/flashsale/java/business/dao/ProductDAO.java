@@ -90,4 +90,26 @@ public class ProductDAO {
             return false;
         }
     }
+
+
+    // 4. Xóa sản phẩm theo ID (Dùng PreparedStatement)
+    public boolean delete(int id) {
+        // Lưu ý: Nếu sản phẩm đã có trong đơn hàng, câu lệnh này sẽ throw SQLException
+        // do ràng buộc Foreign Key trong file DatabaseConnectionManager
+        String sql = "DELETE FROM Products WHERE id = ?";
+
+        try (Connection conn = DatabaseConnectionManager.openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu xóa thành công
+
+        } catch (SQLException e) {
+
+            System.err.println("Lỗi xóa sản phẩm (Có thể sản phẩm đang nằm trong đơn hàng): " + e.getMessage());
+            return false;
+        }
+    }
 }
