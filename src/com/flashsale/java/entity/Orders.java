@@ -61,15 +61,14 @@ public class Orders {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String dateStr = (orderDate != null) ? orderDate.format(formatter) : "N/A";
-        return String.format("| %-5d | %-8d | %,15.2f | %-18s | %-10s |", id, userId, totalAmount, dateStr, status);
+    public static void getHeader() {
+        System.out.printf("| %-5s | %-8s | %-15s | %-18s | %-10s |\n", "ID", "User ID", "Total", "Order Date", "Status");
+        System.out.println("-----------------------------------------------------------------------");
     }
 
-    public static String getHeader() {
-        return String.format("| %-5s | %-8s | %-15s | %-18s | %-10s |\n", "ID", "User ID", "Total Amount", "Order Date", "Status") +
-                "-----------------------------------------------------------------------";
+    public void displayData() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dateStr = (this.orderDate != null) ? this.orderDate.format(formatter) : "Null";
+        System.out.printf("| %-5d | %-8d | %,15.2f | %-18s | %-10s |\n", this.id, this.userId, this.totalAmount, dateStr, this.status);
     }
 }

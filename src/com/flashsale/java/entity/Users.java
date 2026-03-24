@@ -38,13 +38,12 @@ public class Users {
         this.username = username;
     }
 
-    @Override
-    public String toString() {
-        return String.format("| %-5d | %-30s | %-20s |", id, email, username);
+    public static void getHeader() {
+        System.out.printf("| %-5s | %-30s | %-20s |\n", "ID", "Email Address", "Username");
+        System.out.println("-------------------------------------------------------------");
     }
 
-    public static String getHeader() {
-        return String.format("| %-5s | %-30s | %-20s |\n", "ID", "Email Address", "Username") +
-                "-------------------------------------------------------------";
+    public void displayData() {
+        System.out.printf("| %-5d | %-30s | %-20s |\n", this.id, this.email, this.username);
     }
 }
